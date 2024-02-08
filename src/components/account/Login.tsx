@@ -88,13 +88,6 @@ const OcLoginForm: FunctionComponent<OcLoginFormProps> = ({title = "Sign into yo
               <Heading as="h1" fontSize={"4xl"} fontWeight={"thin"} color={loginHeaderColor}>
                 {title}
               </Heading>
-              {/* TODO Get Errors on Login */}
-              {/* {error && (
-              <Alert status="error" variant="solid">
-                <AlertIcon />
-                {error.message}{" "}
-              </Alert>
-            )} */}
               <FormControl display={"flex"} flexFlow={"column nowrap"} gap={4} minW={"sm"}>
                 <Box>
                   <FormLabel htmlFor="identifier">Username</FormLabel>
