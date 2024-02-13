@@ -114,9 +114,10 @@ export function PromotionDetail({
 
   const {handleSubmit, control, reset} = useForm<PromotionDetailFormFields>({
     resolver: yupResolver(validationSchema) as any,
-    defaultValues: promotion?.ID
-      ? {Promotion: promotion, PromotionAssignments: promotionAssignments || []}
-      : defaultValues,
+    defaultValues:
+      promotion?.ID || router.query?.cloneid
+        ? {Promotion: promotion, PromotionAssignments: promotionAssignments || []}
+        : defaultValues,
     mode: "onBlur"
   })
 
@@ -171,7 +172,7 @@ export function PromotionDetail({
       router.replace(`/promotions/${updatedPromotion.ID}`)
     } else {
       const [finalPromotion, finalPromotionAssignments] = await Promise.all([
-        fetchPromotion(updatedPromotion.ID),
+        fetchPromotion(updatedPromotion.ID, false),
         fetchPromotionAssignments(updatedPromotion.ID)
       ])
       reset({
@@ -193,7 +194,16 @@ export function PromotionDetail({
               <ResetButton control={control} reset={reset} variant="outline">
                 Discard Changes
               </ResetButton>
-              <SubmitButton control={control} variant="solid" colorScheme="primary">
+              {!isCreatingNew && (
+                <Button
+                  variant="solid"
+                  colorScheme="primary"
+                  onClick={() => router.push(`/promotions/clone/${promotion.ID}`)}
+                >
+                  Clone
+                </Button>
+              )}
+              <SubmitButton control={control} variant="solid" colorScheme="secondary">
                 Save
               </SubmitButton>
             </ButtonGroup>

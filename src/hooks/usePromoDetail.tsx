@@ -10,8 +10,13 @@ export function usePromotionDetail() {
   const [promotionAssignments, setPromotionAssignments] = useState([] as PromotionAssignment[])
   const [defaultOwnerId, setDefaultOwnerId] = useState("")
 
-  const fetchPromotion = useCallback(async (promotionID: string) => {
+  const fetchPromotion = useCallback(async (promotionID: string, isCloning: boolean) => {
     const promo = await Promotions.Get<IPromotion>(promotionID)
+    if (isCloning) {
+      promo.ID = null
+      promo.Name = null
+      promo.Code = null
+    }
     setPromotion(promo)
     return promo
   }, [])
@@ -32,15 +37,16 @@ export function usePromotionDetail() {
 
   const getData = useCallback(async () => {
     const promotionID = query.promotionid?.toString()
+    const cloneID = query.cloneid?.toString()
     const requests: any[] = []
-    if (promotionID) {
-      requests.push(fetchPromotion(promotionID))
-      requests.push(fetchPromotionAssignments(promotionID))
+    if (promotionID || cloneID) {
+      requests.push(fetchPromotion(promotionID || cloneID, !!cloneID))
+      requests.push(fetchPromotionAssignments(promotionID || cloneID))
     } else {
       requests.push(fetchDefaultOwnerId())
     }
     await Promise.all(requests)
-  }, [query.promotionid, fetchPromotion, fetchPromotionAssignments, fetchDefaultOwnerId])
+  }, [query.promotionid, query.cloneid, fetchPromotion, fetchPromotionAssignments, fetchDefaultOwnerId])
 
   useEffect(() => {
     const initializeData = async () => {
