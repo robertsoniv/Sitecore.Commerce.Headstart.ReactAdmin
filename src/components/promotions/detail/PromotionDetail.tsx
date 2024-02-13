@@ -12,7 +12,8 @@ import {
   CardHeader,
   Button,
   ButtonGroup,
-  Container
+  Container,
+  useDisclosure
 } from "@chakra-ui/react"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {appPermissions} from "config/app-permissions.config"
@@ -114,9 +115,10 @@ export function PromotionDetail({
 
   const {handleSubmit, control, reset} = useForm<PromotionDetailFormFields>({
     resolver: yupResolver(validationSchema) as any,
-    defaultValues: promotion?.ID
-      ? {Promotion: promotion, PromotionAssignments: promotionAssignments || []}
-      : defaultValues,
+    defaultValues:
+      promotion?.ID || router.query?.cloneid
+        ? {Promotion: promotion, PromotionAssignments: promotionAssignments || []}
+        : defaultValues,
     mode: "onBlur"
   })
 
@@ -171,7 +173,7 @@ export function PromotionDetail({
       router.replace(`/promotions/${updatedPromotion.ID}`)
     } else {
       const [finalPromotion, finalPromotionAssignments] = await Promise.all([
-        fetchPromotion(updatedPromotion.ID),
+        fetchPromotion(updatedPromotion.ID, false),
         fetchPromotionAssignments(updatedPromotion.ID)
       ])
       reset({
@@ -182,59 +184,70 @@ export function PromotionDetail({
   }
 
   return (
-    <Container maxW="full" bgColor="st.mainBackgroundColor" flexGrow={1} p={[4, 6, 8]}>
-      <Card as="form" noValidate onSubmit={handleSubmit(onSubmit)}>
-        <CardHeader display="flex" flexWrap="wrap" justifyContent="space-between">
-          <Button onClick={() => router.back()} variant="ghost" leftIcon={<TbChevronLeft />}>
-            Back
-          </Button>
-          <ProtectedContent hasAccess={appPermissions.PromotionManager}>
-            <ButtonGroup>
-              <ResetButton control={control} reset={reset} variant="outline">
-                Discard Changes
-              </ResetButton>
-              <SubmitButton control={control} variant="solid" colorScheme="primary">
-                Save
-              </SubmitButton>
-            </ButtonGroup>
-          </ProtectedContent>
-        </CardHeader>
-        <CardBody>
-          <Tabs variant="enclosed">
-            <TabList>
-              <Tab>Details</Tab>
-              <Tab>Application Rules</Tab>
-              <Tab>Usage Limits</Tab>
-              <Tab>Expression Builder</Tab>
-              <ProtectedContent hasAccess={appPermissions.PromotionManager}>
-                <Tab>Assignments</Tab>
-              </ProtectedContent>
-            </TabList>
-            <TabPanels>
-              <TabPanel maxW="container.lg">
-                <DetailsTab control={control} validationSchema={validationSchema} isCreatingNew={isCreatingNew} />
-              </TabPanel>
-              <TabPanel>
-                <ApplicationRulesTab control={control} validationSchema={validationSchema} />
-              </TabPanel>
-              <TabPanel>
-                <UsageLimitsTab control={control} validationSchema={validationSchema} isCreatingNew={isCreatingNew} />
-              </TabPanel>
-              <TabPanel>
-                <ExpressionBuilderTab
-                  control={control}
-                  validationSchema={validationSchema}
-                  initialQuery={initialQuery}
-                  promotion={promotion}
-                />
-              </TabPanel>
-              <TabPanel>
-                <PromoAssignmentTab control={control} validationSchema={validationSchema} />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </CardBody>
-      </Card>
-    </Container>
+    <>
+      <Container maxW="full" bgColor="st.mainBackgroundColor" flexGrow={1} p={[4, 6, 8]}>
+        <Card as="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+          <CardHeader display="flex" flexWrap="wrap" justifyContent="space-between">
+            <Button onClick={() => router.back()} variant="ghost" leftIcon={<TbChevronLeft />}>
+              Back
+            </Button>
+            <ProtectedContent hasAccess={appPermissions.PromotionManager}>
+              <ButtonGroup>
+                <ResetButton control={control} reset={reset} variant="outline">
+                  Discard Changes
+                </ResetButton>
+                {!isCreatingNew && (
+                  <Button
+                    variant="solid"
+                    colorScheme="primary"
+                    onClick={() => router.push(`/promotions/clone/${promotion.ID}`)}
+                  >
+                    Clone
+                  </Button>
+                )}
+                <SubmitButton control={control} variant="solid" colorScheme="secondary">
+                  Save
+                </SubmitButton>
+              </ButtonGroup>
+            </ProtectedContent>
+          </CardHeader>
+          <CardBody>
+            <Tabs variant="enclosed">
+              <TabList>
+                <Tab>Details</Tab>
+                <Tab>Application Rules</Tab>
+                <Tab>Usage Limits</Tab>
+                <Tab>Expression Builder</Tab>
+                <ProtectedContent hasAccess={appPermissions.PromotionManager}>
+                  <Tab>Assignments</Tab>
+                </ProtectedContent>
+              </TabList>
+              <TabPanels>
+                <TabPanel maxW="container.lg">
+                  <DetailsTab control={control} validationSchema={validationSchema} isCreatingNew={isCreatingNew} />
+                </TabPanel>
+                <TabPanel>
+                  <ApplicationRulesTab control={control} validationSchema={validationSchema} />
+                </TabPanel>
+                <TabPanel>
+                  <UsageLimitsTab control={control} validationSchema={validationSchema} isCreatingNew={isCreatingNew} />
+                </TabPanel>
+                <TabPanel>
+                  <ExpressionBuilderTab
+                    control={control}
+                    validationSchema={validationSchema}
+                    initialQuery={initialQuery}
+                    promotion={promotion}
+                  />
+                </TabPanel>
+                <TabPanel>
+                  <PromoAssignmentTab control={control} validationSchema={validationSchema} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </CardBody>
+        </Card>
+      </Container>
+    </>
   )
 }
