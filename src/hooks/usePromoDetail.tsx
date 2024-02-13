@@ -41,7 +41,7 @@ export function usePromotionDetail() {
     const requests: any[] = []
     if (promotionID || cloneID) {
       requests.push(fetchPromotion(promotionID || cloneID, !!cloneID))
-      requests.push(fetchPromotionAssignments(promotionID)) // TODO: get promotions with clone id too?
+      requests.push(fetchPromotionAssignments(promotionID || cloneID))
     } else {
       requests.push(fetchDefaultOwnerId())
     }
