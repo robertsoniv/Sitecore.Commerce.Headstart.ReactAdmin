@@ -43,4 +43,3 @@ sitemap*.xml
 *.tsbuildinfo
 /.env
 .env.vercelcommerce.local
-.node-version
