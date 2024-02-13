@@ -19,7 +19,6 @@ export function DetailsTab({control, validationSchema, isCreatingNew}: DetailsTa
 
   const generateCode = () => {
     const code = Math.random().toString(36).slice(2).substring(0, 5).toUpperCase()
-    console.log("code", code)
     onPromoCodeChange(code)
   }
   return (

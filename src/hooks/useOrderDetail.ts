@@ -104,7 +104,7 @@ export function useOrderDetail() {
         return {DefaultSupplierID: supplierId || null, Addresses: []}
       }
 
-      const isSupplierAddresses = Boolean(supplierId)
+      const isSupplierAddresses = Boolean(supplierId) && supplierId !== "null"
       if (isSupplierAddresses) {
         const addressList = await SupplierAddresses.List<ISupplierAddress>(supplierId, {
           filters: {ID: uniqueAddressIds.join("|")},

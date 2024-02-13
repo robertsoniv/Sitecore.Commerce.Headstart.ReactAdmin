@@ -67,6 +67,10 @@ export function OrderDetail({
     return lineItem.QuantityShipped && lineItem.Product.Returnable && getMaxReturnQuantity(lineItem, returns)
   })
 
+  const refreshOrderAndLines = async () => {
+    await Promise.all([fetchOrder(order.ID), fetchLineItems(order)])
+  }
+
   return (
     <Container maxW="100%" bgColor="st.mainBackgroundColor" flexGrow={1} p={[4, 6, 8]}>
       <Heading size="md" marginBottom={7}>
@@ -132,7 +136,10 @@ export function OrderDetail({
               </CardHeader>
               <CardBody>
                 <OrderProducts
+                  refreshOrderAndLines={refreshOrderAndLines}
+                  orderId={order.ID}
                   isAdmin={isAdmin}
+                  isOrderAwaitingApproval={order.Status === "AwaitingApproval"}
                   lineItems={lineItems}
                   suppliers={suppliers}
                   shipFromAddresses={shipFromAddresses}
