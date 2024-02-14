@@ -3,6 +3,7 @@ import React from "react"
 import {
   TbBuildingWarehouse,
   TbLayout,
+  TbQuote,
   TbReceipt2,
   TbSettings2,
   TbShoppingCartDiscount,
@@ -46,6 +47,12 @@ const SidebarMenu = ({isInDrawer, onLinkClick}: SidebarMenuProps) => {
       label: "Orders",
       path: "/orders",
       icon: TbReceipt2,
+      permisshies: [appPermissions.OrderViewer, appPermissions.OrderManager]
+    },
+    {
+      label: "Quotes",
+      path: "/orders?status=AwaitingApproval",
+      icon: TbQuote,
       permisshies: [appPermissions.OrderViewer, appPermissions.OrderManager]
     },
     {
