@@ -83,5 +83,7 @@ export const appSettings = {
   ),
   themeFontHeading: getFont("NEXT_PUBLIC_THEME_FONT_HEADING", process.env.NEXT_PUBLIC_THEME_FONT_HEADING, ""),
   themeFontBody: getFont("NEXT_PUBLIC_THEME_FONT_BODY", process.env.NEXT_PUBLIC_THEME_FONT_BODY, ""),
-  themeLogoUrl: getEnvironmentVariable("NEXT_PUBLIC_THEME_LOGO_URL", process.env.NEXT_PUBLIC_THEME_LOGO_URL, "", false)
+  themeLogoUrl: getEnvironmentVariable("NEXT_PUBLIC_THEME_LOGO_URL", process.env.NEXT_PUBLIC_THEME_LOGO_URL, "", false),
+  buyerUrl: getEnvironmentVariable("NEXT_PUBLIC_OC_BUYER_URL", process.env.NEXT_PUBLIC_OC_BUYER_URL),
+  buyerApiClient: getEnvironmentVariable("NEXT_PUBLIC_OC_BUYER_CLIENT_ID", process.env.NEXT_PUBLIC_OC_BUYER_CLIENT_ID)
 }
