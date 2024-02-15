@@ -14,6 +14,7 @@ import {
 import {InputControl, SwitchControl} from "components/react-hook-form"
 import {
   AdminUsers,
+  ImpersonateTokenRequest,
   PartialDeep,
   SecurityProfileAssignment,
   SecurityProfiles,
@@ -35,9 +36,10 @@ import {appPermissions} from "config/app-permissions.config"
 import ProtectedContent from "../auth/ProtectedContent"
 import {SecurityProfileAssignmentTabs} from "../security-profiles/assignments/SecurityProfileAssignmentTabs"
 import {differenceBy, isEmpty, isEqual, omit} from "lodash"
-import {useState} from "react"
+import {useCallback, useState} from "react"
 import {FaEye, FaEyeSlash} from "react-icons/fa"
 import {FakePasswordInput} from "./FakePasswordInput"
+import {appSettings} from "../../config/app-settings"
 
 interface FormFieldValues {
   User: User & {ConfirmPassword: string}
@@ -229,6 +231,17 @@ export function UserForm({user, userType, parentId, securityProfileAssignments =
   const passwordTooltipText =
     "For security reasons it is recommended to not set user passwords here, and instead have them set their own passwords via the forgot password flow"
 
+  const handleImpersonate = useCallback(async () => {
+    const buyerID = router?.query?.buyerid as string
+    const userID = router?.query?.userid as string
+    const tokenRequest = {
+      ClientID: appSettings.buyerApiClient,
+      Roles: ["Shopper", "MeAddressAdmin", "OrderAdmin"]
+    } as ImpersonateTokenRequest
+    const token = await Users.GetAccessToken(buyerID, userID, tokenRequest)
+    window.open(`${appSettings.buyerUrl}?ocImpersonationToken=${token.access_token}`, "_blank")
+  }, [router?.query?.buyerid, router?.query?.userid])
+
   return (
     <Container maxW="100%" bgColor="st.mainBackgroundColor" flexGrow={1} p={[4, 6, 8]}>
       <Card as="form" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -244,6 +257,9 @@ export function UserForm({user, userType, parentId, securityProfileAssignments =
               <SubmitButton control={control} variant="solid" colorScheme="primary">
                 Save
               </SubmitButton>
+              <Button variant="solid" colorScheme="secondary" onClick={handleImpersonate}>
+                Impersonate User
+              </Button>
             </ButtonGroup>
           </ProtectedContent>
         </CardHeader>
