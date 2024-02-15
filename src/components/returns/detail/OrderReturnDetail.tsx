@@ -37,6 +37,7 @@ export function OrderReturnDetail({orderReturn, lineItems, payment, fetchOrderRe
         // return to complete automatically
         orderReturnPayment = {
           ...payment,
+          ID: undefined, // if we use the same ID we'll get a conflict
           OrderReturnID: orderReturn.ID,
           Amount: orderReturn.RefundAmount * -1
         }
