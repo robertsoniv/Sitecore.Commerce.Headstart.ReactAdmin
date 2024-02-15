@@ -51,7 +51,7 @@ const SidebarMenu = ({isInDrawer, onLinkClick}: SidebarMenuProps) => {
     },
     {
       label: "Quotes",
-      path: "/orders?status=AwaitingApproval",
+      path: "/quotes?status=AwaitingApproval",
       icon: TbQuote,
       permisshies: [appPermissions.OrderViewer, appPermissions.OrderManager]
     },

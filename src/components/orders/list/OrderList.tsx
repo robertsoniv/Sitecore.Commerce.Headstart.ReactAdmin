@@ -10,6 +10,7 @@ import OrderActionMenu from "./OrderActionMenu"
 import OrderListToolbar from "./OrderListToolbar"
 import {OrderStatus} from "../OrderStatus"
 import {useAuth} from "hooks/useAuth"
+import {useRouter} from "next/router"
 
 export const OrderStatusColorSchemeMap = {
   "": "gray",
@@ -128,6 +129,7 @@ const OrderList: FC = () => {
   const editDisclosure = useDisclosure()
   const deleteDisclosure = useDisclosure()
   const {isSupplier} = useAuth()
+  const router = useRouter()
 
   // For supplier orders, the order will always be from the admin user
   // so its not very helpful to include the customer informtion, omitting for now
@@ -177,7 +179,7 @@ const OrderList: FC = () => {
   )
 
   const resolveOrderDetailHref = (order: IOrder) => {
-    return `/orders/${order.ID}`
+    return `${router.pathname}/${order.ID}`
   }
 
   return (
