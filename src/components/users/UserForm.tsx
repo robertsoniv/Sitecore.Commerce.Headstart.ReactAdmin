@@ -236,7 +236,19 @@ export function UserForm({user, userType, parentId, securityProfileAssignments =
     const userID = router?.query?.userid as string
     const tokenRequest = {
       ClientID: appSettings.buyerApiClient,
-      Roles: ["Shopper", "MeAddressAdmin", "OrderAdmin"]
+      Roles: [
+        "Shopper",
+        "MeAddressAdmin",
+        "OrderAdmin",
+        "MeAdmin",
+        "MeCreditCardAdmin",
+        "MeSubscriptionAdmin",
+        "MeXpAdmin",
+        "PasswordReset",
+        "ProductFacetReader",
+        "SupplierAddressReader",
+        "SupplierReader"
+      ]
     } as ImpersonateTokenRequest
     const token = await Users.GetAccessToken(buyerID, userID, tokenRequest)
     window.open(`${appSettings.buyerUrl}?ocImpersonationToken=${token.access_token}`, "_blank")
