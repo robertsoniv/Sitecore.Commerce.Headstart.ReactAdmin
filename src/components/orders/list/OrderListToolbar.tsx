@@ -9,6 +9,7 @@ import OrderListActions from "./OrderListActions"
 import {OrderDirectionFilter} from "./OrderDirectionFilter"
 import ProtectedContent from "@/components/auth/ProtectedContent"
 import {appPermissions} from "config/app-permissions.config"
+import OrderCostCenterFilter from "./OrderCostCenterFilter"
 
 interface OrderListToolbarProps extends Omit<ListViewChildrenProps, "renderContent"> {
   onBulkEdit: () => void
@@ -60,6 +61,10 @@ const OrderListToolbar: FC<OrderListToolbarProps> = ({
 
               <OrderDirectionFilter value={routeParams["Direction"]} onChange={updateQuery("d", true)} />
               <OrderStatusFilter value={filterParams["Status"]} onChange={updateQuery("status", true)} />
+              <OrderCostCenterFilter
+                value={filterParams["xp.CostCenter.ID"]}
+                onChange={updateQuery("costcenter", true)}
+              />
               <OrderListActions />
             </Stack>
           </Stack>

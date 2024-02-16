@@ -35,7 +35,8 @@ const OrderQueryMap = {
 const OrderFilterMap = {
   status: "Status",
   from: "from",
-  to: "to"
+  to: "to",
+  costcenter: "xp.CostCenter.ID"
 }
 
 const OrderDefaultServiceOptions = {parameters: ["Incoming"]}
