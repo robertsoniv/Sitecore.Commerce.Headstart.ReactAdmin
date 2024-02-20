@@ -5,6 +5,9 @@ export interface SpecFieldValues {
   Name: string
   DefinesVariant?: boolean
   Options?: SpecOptionFieldValues[]
+  xp?: {
+    WarrantyType?: string
+  }
 }
 
 export interface SpecOptionFieldValues {

@@ -17,7 +17,8 @@ import {
   Text,
   VStack,
   Badge,
-  CardProps
+  CardProps,
+  ButtonGroup
 } from "@chakra-ui/react"
 import {TbCactus} from "react-icons/tb"
 import {SpecActionsMenu} from "./SpecActionsMenu"
@@ -28,6 +29,7 @@ import {uniq, flatten} from "lodash"
 import {ProductDetailFormFields} from "../form-meta"
 import ProtectedContent from "@/components/auth/ProtectedContent"
 import {appPermissions} from "config/app-permissions.config"
+// import {WarrantySpecUpdateModal} from "./WarrantySpecUpdateModal"
 
 interface SpecTableProps extends CardProps {
   control: Control<ProductDetailFormFields>
@@ -67,11 +69,18 @@ export function SpecTable({control, ...cardProps}: SpecTableProps) {
           <VStack>
             <Text>This product has no specs</Text>
             <ProtectedContent hasAccess={appPermissions.ProductManager}>
-              <SpecUpdateModal
-                onUpdate={append}
-                as="button"
-                buttonProps={{variant: "solid", size: "sm", colorScheme: "primary"}}
-              />
+              <ButtonGroup>
+                <SpecUpdateModal
+                  onUpdate={append}
+                  as="button"
+                  buttonProps={{variant: "solid", size: "sm", colorScheme: "primary"}}
+                />
+                {/* <WarrantySpecUpdateModal
+                  onUpdate={append}
+                  as="button"
+                  buttonProps={{variant: "solid", size: "sm", colorScheme: "primary"}}
+                /> */}
+              </ButtonGroup>
             </ProtectedContent>
           </VStack>
         </Heading>
