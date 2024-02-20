@@ -247,7 +247,8 @@ export function UserForm({user, userType, parentId, securityProfileAssignments =
         "PasswordReset",
         "ProductFacetReader",
         "SupplierAddressReader",
-        "SupplierReader"
+        "SupplierReader",
+        "BuyerUserAdmin"
       ]
     } as ImpersonateTokenRequest
     const token = await Users.GetAccessToken(buyerID, userID, tokenRequest)
